@@ -7,7 +7,7 @@ Example for integrating API in front-end development using react
 Design a component as in the attached image in ReactJS and use the following API to show the listing with the following functionalities:
 
 API:
-http://185.252.234.162:8000/api_v1/store/public/getServiceListByStoreId?storeId=1
+in constants
 
 Clicking on the add button should add to a JSON and the button should convert to remove, similarly on clicking remove should work opposite with the selected values.
 At the end of the listing on clicking the submit button the resultant JSON of the added components should be displayed on the popup/model in the following sample format-
