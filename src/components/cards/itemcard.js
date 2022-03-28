@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Image,
@@ -18,6 +18,27 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 
 const ItemCard = (props) => {
+  const [action, setAction] = useState({ title: "Add", color: "blue" });
+  const [selectStaff, setSelectStaff] = useState("staff");
+  const [variant, setVariant] = useState("variant");
+  const [badgeColor, setBadgeColor] = useState("gray");
+
+  const handleAdd = (e) => {
+    if (e.target.innerHTML === "Remove") {
+      setAction({ title: "Add", color: "blue" });
+    } else {
+      setAction({ title: "Remove", color: "red" });
+    }
+  };
+
+  const handleStaff = (e) => {
+    setSelectStaff(e.target.innerHTML);
+  };
+
+  const handleVarient = (e) => {
+    setVariant(e.target.innerHTML);
+  };
+
   return (
     <Box bg="Window" maxW="40rem" overflow="hidden" rounded="md" p="3">
       <HStack spacing={8}>
@@ -26,7 +47,7 @@ const ItemCard = (props) => {
           <HStack align="baseline" width={"100%"} justify={"space-between"}>
             <Box align="baseline">
               <Text display={"inline"} fontSize={"xl"}>
-                Arabic Coffe
+                Arabic Coffee
               </Text>
               <Text
                 display={"inline"}
@@ -62,10 +83,20 @@ const ItemCard = (props) => {
               >
                 size:
               </Text>
-              <Button rounded={"full"} size="xs" mx="0.5">
+              <Button
+                colorScheme={badgeColor}
+                rounded={"full"}
+                size="xs"
+                mx="0.5"
+              >
                 80g
               </Button>
-              <Button rounded={"full"} size="xs" mx="0.5">
+              <Button
+                colorScheme={badgeColor}
+                rounded={"full"}
+                size="xs"
+                mx="0.5"
+              >
                 160g
               </Button>
               <Menu>
@@ -75,9 +106,9 @@ const ItemCard = (props) => {
                   size="xs"
                   mx="1"
                 >
-                  Staff
+                  {selectStaff}
                 </MenuButton>
-                <MenuList>
+                <MenuList onClick={(e) => handleStaff(e)}>
                   <MenuItem>staff1</MenuItem>
                   <MenuItem>staff2</MenuItem>
                 </MenuList>
@@ -88,21 +119,23 @@ const ItemCard = (props) => {
                   rightIcon={<FontAwesomeIcon icon={faAngleDown} />}
                   size="xs"
                 >
-                  Variant
+                  {variant}
                 </MenuButton>
-                <MenuList>
+                <MenuList onClick={(e) => handleVarient(e)}>
                   <MenuItem>house guest</MenuItem>
                   <MenuItem>Dine in</MenuItem>
                 </MenuList>
               </Menu>
             </Box>
             <Button
+              className="Add"
               variant={"solid"}
-              colorScheme="blue"
+              colorScheme={action.color}
               rounded={"full"}
               size="sm"
+              onClick={(e) => handleAdd(e)}
             >
-              Add
+              {action.title}
             </Button>
           </HStack>
         </VStack>
