@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Image,
@@ -18,23 +18,54 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 
 const ItemCard = (props) => {
+  // service name
+  // secondary service name
+  // drop down variant
+  // timings
+  // custom radio button using chakra ui
+  // make a json object when hit add with post request
+  // make a json payload when hit remove with delete request
   const [action, setAction] = useState({ title: "Add", color: "blue" });
-  const [selectStaff, setSelectStaff] = useState("staff");
   const [variant, setVariant] = useState("variant");
-  const [badgeColor, setBadgeColor] = useState("gray");
+  const [cardData, setCardData] = useState({
+    name: "",
+    secondaryname: "",
+    timmings: {},
+    servicetype: "",
+    price: ""
+  });
 
   const handleAdd = (e) => {
     if (e.target.innerHTML === "Remove") {
       setAction({ title: "Add", color: "blue" });
+      setCardData({
+        name: "",
+        secondaryname: "",
+        timmings: {},
+        servicetype: "",
+        price: ""
+      });
     } else {
       setAction({ title: "Remove", color: "red" });
+      setCardData({
+        name: props?.servicename,
+        secondaryname: props?.secondname,
+        timmings: props.timing,
+        price: props?.price
+      });
     }
   };
 
-  const handleStaff = (e) => {
-    setSelectStaff(e.target.innerHTML);
+  useEffect(() => {
+    if (cardData.name !== null) {
+      alert(JSON.stringify(cardData));
+    }
+  });
+  const viewcardData = () => {
+    if (cardData.name !== "") {
+      alert(cardData);
+    }
   };
-
   const handleVarient = (e) => {
     setVariant(e.target.innerHTML);
   };
@@ -47,7 +78,7 @@ const ItemCard = (props) => {
           <HStack align="baseline" width={"100%"} justify={"space-between"}>
             <Box align="baseline">
               <Text display={"inline"} fontSize={"xl"}>
-                Arabic Coffee
+                {props?.servicename}
               </Text>
               <Text
                 display={"inline"}
@@ -64,12 +95,11 @@ const ItemCard = (props) => {
             </Box>
           </HStack>
           <Text fontSize={"sm"} fontWeight={"light"} color={"gray.400"}>
-            it is a long established fact that a reader will be attracted by the
-            readable content of the page while looking at it
+            {props?.secondservice}
           </Text>
           <Box alignSelf={"flex-start"}>
             <Text fontSize={"md"} fontWeight={"900"}>
-              $49
+              {props?.price}
             </Text>
           </Box>
           <HStack width={"100%"} align="baseline" justify={"space-between"}>
@@ -81,38 +111,14 @@ const ItemCard = (props) => {
                 color={"gray.400"}
                 mx="1"
               >
-                size:
+                {props?.timing[0].value +
+                  " " +
+                  props?.timing[0].key +
+                  " : " +
+                  props?.timing[1].value +
+                  " " +
+                  props?.timing[1].key}
               </Text>
-              <Button
-                colorScheme={badgeColor}
-                rounded={"full"}
-                size="xs"
-                mx="0.5"
-              >
-                80g
-              </Button>
-              <Button
-                colorScheme={badgeColor}
-                rounded={"full"}
-                size="xs"
-                mx="0.5"
-              >
-                160g
-              </Button>
-              <Menu>
-                <MenuButton
-                  as={Button}
-                  rightIcon={<FontAwesomeIcon icon={faAngleDown} />}
-                  size="xs"
-                  mx="1"
-                >
-                  {selectStaff}
-                </MenuButton>
-                <MenuList onClick={(e) => handleStaff(e)}>
-                  <MenuItem>staff1</MenuItem>
-                  <MenuItem>staff2</MenuItem>
-                </MenuList>
-              </Menu>
               <Menu>
                 <MenuButton
                   as={Button}
@@ -122,8 +128,11 @@ const ItemCard = (props) => {
                   {variant}
                 </MenuButton>
                 <MenuList onClick={(e) => handleVarient(e)}>
-                  <MenuItem>house guest</MenuItem>
-                  <MenuItem>Dine in</MenuItem>
+                  {props.servicetype
+                    ? props.servicetype.map((value, idx) => {
+                        return <MenuItem key={idx}>{value}</MenuItem>;
+                      })
+                    : console.log("not rendered")}
                 </MenuList>
               </Menu>
             </Box>
