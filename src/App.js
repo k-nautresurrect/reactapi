@@ -1,12 +1,10 @@
-import { Stack } from "@chakra-ui/react";
 import "./App.css";
-import ItemCard from "./components/cards/itemcard";
-import CardList from "./views/home/cardlist";
+import CardData from "./components/cards/data";
 
 function App() {
   return (
     <div className="App">
-      <CardList />
+      <CardData />
     </div>
   );
 }
