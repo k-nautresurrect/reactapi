@@ -1,7 +1,6 @@
-import { Text } from "@chakra-ui/react";
+import { Button, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { GetValue } from "../../api/getvalues";
-import Card from "../card/card";
 import ItemCard from "./itemcard";
 
 const CardData = (props) => {
@@ -16,6 +15,7 @@ const CardData = (props) => {
   const [prices, setPrice] = useState([]);
   const [variantprops, setVariantProps] = useState([]);
   const [datacount, setDataCount] = useState([]);
+  const [cardsdata, setCardsData] = useState([]);
 
   const callApi = () => {
     let serviceData = [];
@@ -59,6 +59,9 @@ const CardData = (props) => {
         .then(() => setPrice(priceData))
         .catch((err) => console.log("serviceData: ", err));
     } catch (err) {
+      if (datafetched) {
+        console.log("data is not fetched");
+      }
       console.log("Error : ", err);
       setDataFetched(false);
     }
@@ -72,6 +75,26 @@ const CardData = (props) => {
     }
   }, []);
 
+  const handleSubmit = (data) => {
+    if (data.type === "add") {
+      setCardsData([...cardsdata, data]);
+    } else if (data.type === "remove") {
+      const cards = cardsdata.filter((card) => card.id !== data.id);
+      setCardsData(cards);
+    }
+  };
+
+  if (cardsdata) {
+    console.log("card Data", cardsdata);
+  }
+
+  // const printData = () => {
+  //   if (cardsdata.length !== 0) {
+  //     console.log(cardsdata);
+  //   } else {
+  //     console.log("add some cards");
+  //   }
+  // };
   return (
     <>
       {bookedData.length !== 0
@@ -102,7 +125,7 @@ const CardData = (props) => {
         ? console.log("the length is :", datacount)
         : console.log("datacount is : ", datacount)}
 
-      {datacount.length != 0 &&
+      {datacount.length !== 0 &&
       bookedData.length !== 0 &&
       prices.length !== 0 &&
       primaryservicename.length !== 0 &&
@@ -118,9 +141,17 @@ const CardData = (props) => {
               secondservice={secondaryservicename[idx]}
               price={prices[idx]}
               timing={variantprops[idx]}
+              submit={handleSubmit}
             />
           ))
         : console.log("something went wrong")}
+      <Button
+        variant={"solid"}
+        colorScheme={"twitter"}
+        onClick={() => alert(JSON.stringify(cardsdata))}
+      >
+        Submit
+      </Button>
     </>
   );
 };

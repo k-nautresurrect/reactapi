@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Image,
@@ -33,7 +33,8 @@ const ItemCard = (props) => {
     secondaryname: "",
     timmings: {},
     price: "",
-    variant: ""
+    variant: "",
+    type: ""
   });
   const [submit, setSubmit] = useState([]);
 
@@ -45,12 +46,14 @@ const ItemCard = (props) => {
         secondaryname: "",
         timmings: {},
         price: "",
-        variant: ""
+        variant: "",
+        type: "remove"
       };
       setAction({ title: "Add", color: "blue" });
       setCardData(cardobj);
       const cards = submit.filter((card) => card.id !== cardobj.id);
       setSubmit(cards);
+      props.submit(cardobj);
     } else {
       const cardobj = {
         id: props?.currindex,
@@ -58,23 +61,17 @@ const ItemCard = (props) => {
         secondaryname: props?.secondname,
         timmings: props.timing,
         price: props?.price,
-        variation: variant
+        variation: variant,
+        type: "add"
       };
       setAction({ title: "Remove", color: "red" });
       setCardData(cardobj);
       const cards = [];
       cards.push(cardobj);
       setSubmit(cards);
+      props.submit(cardobj);
     }
   };
-
-  const handleSubmit = (e) => {
-    console.log(submit);
-  };
-
-  useEffect(() => {
-    handleSubmit();
-  }, []);
 
   const handleVarient = (e) => {
     setVariant(e.target.innerHTML);
@@ -164,17 +161,6 @@ const ItemCard = (props) => {
       {submit.length !== 0
         ? console.log("submit is", submit)
         : console.log("submit line")}
-      {props?.currindex === props?.index ? (
-        <Button
-          variant={"solid"}
-          colorScheme={"twitter"}
-          onClick={(e) => handleSubmit(e)}
-        >
-          Submit
-        </Button>
-      ) : (
-        console.log("not rendered keys and length")
-      )}
     </>
   );
 };
