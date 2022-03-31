@@ -1,6 +1,7 @@
 import { Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { GetValue } from "../../api/getvalues";
+import Card from "../card/card";
 import ItemCard from "./itemcard";
 
 const CardData = (props) => {
@@ -14,6 +15,7 @@ const CardData = (props) => {
   const [bookedData, setBookedData] = useState([]);
   const [prices, setPrice] = useState([]);
   const [variantprops, setVariantProps] = useState([]);
+  const [datacount, setDataCount] = useState([]);
 
   const callApi = () => {
     let serviceData = [];
@@ -27,6 +29,7 @@ const CardData = (props) => {
           if (res !== null) {
             const data = res.data;
             console.log("data is : ", data);
+            setDataCount(data);
 
             for (let i = 0; i < data.length; i++) {
               if (i <= 1) {
@@ -73,59 +76,51 @@ const CardData = (props) => {
     <>
       {bookedData.length !== 0
         ? bookedData.map((value, index) => {
-            return (
-              <Text color={"white"} key={index}>
-                {value}
-              </Text>
-            );
+            return <Text key={index}>{value}</Text>;
           })
         : console.log("not rendered text")}
       {prices.length !== 0
         ? prices.map((value, index) => {
-            return (
-              <Text color={"white"} key={index}>
-                {value}
-              </Text>
-            );
+            return <Text key={index}>{value}</Text>;
           })
         : console.log("not redered price")}
       {primaryservicename.length !== 0
         ? primaryservicename.map((value, index) => {
-            return (
-              <Text color={"white"} key={index}>
-                {value}
-              </Text>
-            );
+            return <Text key={index}>{value}</Text>;
           })
         : console.log("not rendered primar service name")}
       {secondaryservicename.length !== 0
         ? secondaryservicename.map((value, index) => {
-            return (
-              <Text color={"white"} key={index}>
-                {value}
-              </Text>
-            );
+            return <Text key={index}>{value}</Text>;
           })
         : console.log("not rendered primar service name")}
       {variantprops.length !== 0
         ? console.log("variant props : ", variantprops)
         : console.log("not rendered variant properties")}
 
-      {bookedData.length !== 0 &&
+      {datacount.length !== 0
+        ? console.log("the length is :", datacount)
+        : console.log("datacount is : ", datacount)}
+
+      {datacount.length != 0 &&
+      bookedData.length !== 0 &&
       prices.length !== 0 &&
       primaryservicename.length !== 0 &&
       secondaryservicename.length !== 0 &&
-      variantprops.length !== 0 ? (
-        <ItemCard
-          servicetype={bookedData}
-          servicename={primaryservicename[0]}
-          secondservice={secondaryservicename[0]}
-          price={prices[0]}
-          timing={variantprops[0]}
-        />
-      ) : (
-        console.log("something went wrong")
-      )}
+      variantprops.length !== 0
+        ? datacount.map((value, idx) => (
+            <ItemCard
+              key={idx}
+              currindex={idx}
+              index={datacount.length - 1}
+              servicetype={bookedData}
+              servicename={primaryservicename[idx]}
+              secondservice={secondaryservicename[idx]}
+              price={prices[idx]}
+              timing={variantprops[idx]}
+            />
+          ))
+        : console.log("something went wrong")}
     </>
   );
 };
